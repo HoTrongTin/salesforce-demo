@@ -1,0 +1,18 @@
+{
+  "status": 0,
+  "result": [
+    {
+      "createdById": "0055g00000K60LzAAJ",
+      "createdByName": "Ho Tin",
+      "createdDate": "2024-01-23T09:04:25.000Z",
+      "fileName": "triggers/AccountUpdateTrigger.trigger",
+      "fullName": "AccountUpdateTrigger",
+      "id": "01q5g000000ztHBAAY",
+      "lastModifiedById": "0055g00000K60LzAAJ",
+      "lastModifiedByName": "Ho Tin",
+      "lastModifiedDate": "2024-01-23T09:40:29.000Z",
+      "manageableState": "unmanaged",
+      "type": "ApexTrigger"
+    }
+  ]
+}
