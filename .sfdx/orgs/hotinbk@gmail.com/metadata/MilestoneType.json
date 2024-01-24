@@ -1,0 +1,41 @@
+{
+  "status": 0,
+  "result": [
+    {
+      "createdById": "0055g00000KbpivAAB",
+      "createdByName": "Process Automated",
+      "createdDate": "2024-01-23T05:54:45.000Z",
+      "fileName": "milestoneTypes/結束個案.milestoneType",
+      "fullName": "結束個案",
+      "id": "5575g0000005kDSAAY",
+      "lastModifiedById": "0055g00000KbpivAAB",
+      "lastModifiedByName": "Process Automated",
+      "lastModifiedDate": "2024-01-23T05:54:45.000Z",
+      "type": "MilestoneType"
+    },
+    {
+      "createdById": "0055g00000KbpivAAB",
+      "createdByName": "Process Automated",
+      "createdDate": "2024-01-23T05:54:45.000Z",
+      "fileName": "milestoneTypes/升級個案.milestoneType",
+      "fullName": "升級個案",
+      "id": "5575g0000005kDRAAY",
+      "lastModifiedById": "0055g00000KbpivAAB",
+      "lastModifiedByName": "Process Automated",
+      "lastModifiedDate": "2024-01-23T05:54:45.000Z",
+      "type": "MilestoneType"
+    },
+    {
+      "createdById": "0055g00000KbpivAAB",
+      "createdByName": "Process Automated",
+      "createdDate": "2024-01-23T05:54:45.000Z",
+      "fileName": "milestoneTypes/給客戶的第一個回應.milestoneType",
+      "fullName": "給客戶的第一個回應",
+      "id": "5575g0000005kDQAAY",
+      "lastModifiedById": "0055g00000KbpivAAB",
+      "lastModifiedByName": "Process Automated",
+      "lastModifiedDate": "2024-01-23T05:54:45.000Z",
+      "type": "MilestoneType"
+    }
+  ]
+}

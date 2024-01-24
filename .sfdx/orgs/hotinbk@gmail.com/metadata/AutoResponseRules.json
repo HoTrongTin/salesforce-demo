@@ -1,0 +1,31 @@
+{
+  "status": 0,
+  "result": [
+    {
+      "createdById": "0055g00000K60LzAAJ",
+      "createdByName": "Ho Tin",
+      "createdDate": "1970-01-01T00:00:00.000Z",
+      "fileName": "autoResponseRules/Case.autoResponseRules",
+      "fullName": "Case",
+      "id": "",
+      "lastModifiedById": "0055g00000K60LzAAJ",
+      "lastModifiedByName": "Ho Tin",
+      "lastModifiedDate": "1970-01-01T00:00:00.000Z",
+      "namespacePrefix": "",
+      "type": "AutoResponseRules"
+    },
+    {
+      "createdById": "0055g00000K60LzAAJ",
+      "createdByName": "Ho Tin",
+      "createdDate": "1970-01-01T00:00:00.000Z",
+      "fileName": "autoResponseRules/Lead.autoResponseRules",
+      "fullName": "Lead",
+      "id": "",
+      "lastModifiedById": "0055g00000K60LzAAJ",
+      "lastModifiedByName": "Ho Tin",
+      "lastModifiedDate": "1970-01-01T00:00:00.000Z",
+      "namespacePrefix": "",
+      "type": "AutoResponseRules"
+    }
+  ]
+}

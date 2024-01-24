@@ -1,0 +1,31 @@
+{
+  "status": 0,
+  "result": [
+    {
+      "createdById": "0055g00000K60LzAAJ",
+      "createdByName": "Ho Tin",
+      "createdDate": "2024-01-24T05:05:22.000Z",
+      "fileName": "remoteSiteSettings/RandomAccounts.remoteSite",
+      "fullName": "RandomAccounts",
+      "id": "0rp5g000000lo4EAAQ",
+      "lastModifiedById": "0055g00000K60LzAAJ",
+      "lastModifiedByName": "Ho Tin",
+      "lastModifiedDate": "2024-01-24T05:05:42.000Z",
+      "manageableState": "unmanaged",
+      "type": "RemoteSiteSetting"
+    },
+    {
+      "createdById": "0055g00000K60LzAAJ",
+      "createdByName": "Ho Tin",
+      "createdDate": "2024-01-23T05:50:52.000Z",
+      "fileName": "remoteSiteSettings/ApexDevNet.remoteSite",
+      "fullName": "ApexDevNet",
+      "id": "0rp5g000001sIDRAA2",
+      "lastModifiedById": "0055g00000K60LzAAJ",
+      "lastModifiedByName": "Ho Tin",
+      "lastModifiedDate": "2024-01-23T05:50:52.000Z",
+      "manageableState": "unmanaged",
+      "type": "RemoteSiteSetting"
+    }
+  ]
+}

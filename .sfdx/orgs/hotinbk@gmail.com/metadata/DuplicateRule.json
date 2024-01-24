@@ -1,0 +1,44 @@
+{
+  "status": 0,
+  "result": [
+    {
+      "createdById": "0055g00000K60LzAAJ",
+      "createdByName": "Ho Tin",
+      "createdDate": "2024-01-23T05:50:52.000Z",
+      "fileName": "duplicateRules/Lead.Standard_Lead_Duplicate_Rule.duplicateRule",
+      "fullName": "Lead.Standard_Lead_Duplicate_Rule",
+      "id": "0Bm5g00000fU4BrCAK",
+      "lastModifiedById": "0055g00000K60LzAAJ",
+      "lastModifiedByName": "Ho Tin",
+      "lastModifiedDate": "2024-01-23T05:50:52.000Z",
+      "manageableState": "unmanaged",
+      "type": "DuplicateRule"
+    },
+    {
+      "createdById": "0055g00000K60LzAAJ",
+      "createdByName": "Ho Tin",
+      "createdDate": "2024-01-23T05:50:52.000Z",
+      "fileName": "duplicateRules/Contact.Standard_Contact_Duplicate_Rule.duplicateRule",
+      "fullName": "Contact.Standard_Contact_Duplicate_Rule",
+      "id": "0Bm5g00000fU4BqCAK",
+      "lastModifiedById": "0055g00000K60LzAAJ",
+      "lastModifiedByName": "Ho Tin",
+      "lastModifiedDate": "2024-01-23T05:50:52.000Z",
+      "manageableState": "unmanaged",
+      "type": "DuplicateRule"
+    },
+    {
+      "createdById": "0055g00000K60LzAAJ",
+      "createdByName": "Ho Tin",
+      "createdDate": "2024-01-23T05:50:52.000Z",
+      "fileName": "duplicateRules/Account.Standard_Account_Duplicate_Rule.duplicateRule",
+      "fullName": "Account.Standard_Account_Duplicate_Rule",
+      "id": "0Bm5g00000fU4BpCAK",
+      "lastModifiedById": "0055g00000K60LzAAJ",
+      "lastModifiedByName": "Ho Tin",
+      "lastModifiedDate": "2024-01-23T05:50:52.000Z",
+      "manageableState": "unmanaged",
+      "type": "DuplicateRule"
+    }
+  ]
+}

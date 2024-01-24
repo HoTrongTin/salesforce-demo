@@ -1,0 +1,41 @@
+{
+  "status": 0,
+  "result": [
+    {
+      "createdById": "0055g00000K60LzAAJ",
+      "createdByName": "Ho Tin",
+      "createdDate": "2024-01-23T07:57:48.000Z",
+      "fileName": "authproviders/DEVOPS_CENTER_GITHUB.authprovider",
+      "fullName": "DEVOPS_CENTER_GITHUB",
+      "id": "0SO5g000000fC8JGAU",
+      "lastModifiedById": "0055g00000K60LzAAJ",
+      "lastModifiedByName": "Ho Tin",
+      "lastModifiedDate": "1970-01-01T00:00:00.000Z",
+      "type": "AuthProvider"
+    },
+    {
+      "createdById": "0055g00000K60LzAAJ",
+      "createdByName": "Ho Tin",
+      "createdDate": "2024-01-23T07:57:48.000Z",
+      "fileName": "authproviders/DEVOPS_CENTER_PROD.authprovider",
+      "fullName": "DEVOPS_CENTER_PROD",
+      "id": "0SO5g000000fC8IGAU",
+      "lastModifiedById": "0055g00000K60LzAAJ",
+      "lastModifiedByName": "Ho Tin",
+      "lastModifiedDate": "1970-01-01T00:00:00.000Z",
+      "type": "AuthProvider"
+    },
+    {
+      "createdById": "0055g00000K60LzAAJ",
+      "createdByName": "Ho Tin",
+      "createdDate": "2024-01-23T07:57:48.000Z",
+      "fileName": "authproviders/DEVOPS_CENTER_TEST.authprovider",
+      "fullName": "DEVOPS_CENTER_TEST",
+      "id": "0SO5g000000fC8DGAU",
+      "lastModifiedById": "0055g00000K60LzAAJ",
+      "lastModifiedByName": "Ho Tin",
+      "lastModifiedDate": "1970-01-01T00:00:00.000Z",
+      "type": "AuthProvider"
+    }
+  ]
+}
