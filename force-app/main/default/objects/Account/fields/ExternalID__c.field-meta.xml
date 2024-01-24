@@ -5,7 +5,7 @@
     <externalId>true</externalId>
     <label>External ID</label>
     <length>32</length>
-    <required>true</required>
+    <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Text</type>
     <unique>true</unique>

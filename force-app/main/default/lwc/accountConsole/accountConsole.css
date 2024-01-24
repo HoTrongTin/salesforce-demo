@@ -1,0 +1,17 @@
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.display-per-page {
+  margin-bottom: 20px;
+}
+
+.pagination {
+  margin-top: 20px;
+}
+
+/* Width of lightning-input is 30% */
+.my-input {
+  width: 200px;
+  margin-bottom: 20px;
+}
