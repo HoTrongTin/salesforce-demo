@@ -1,45 +1,56 @@
-<!-- <template>
-  <lightning-card title="HelloWorld" icon-name="custom:custom14">
-    <div class="slds-m-around_medium">
-      <p>Hello, {greeting}!</p>
-      <lightning-input label="Name" value={greeting} onchange={changeHandler}></lightning-input>
-    </div>
-  </lightning-card>
-</template> -->
-
 <template>
-  <div class="slds-box slds-theme_default">
+  <div class="slds-box slds-theme_default c-container">
+    <h2 class="slds-text-heading_medium slds-m-bottom_medium">Account Console</h2>
     <!-- First Section: Filter Inputs -->
-    <div class="filter-section">
-      <!-- Add your filter inputs here -->
-      <lightning-input class="my-input" label="Account Name" type="text" onchange={handleNameChange}></lightning-input>
-      <lightning-input class="my-input" label="Owner" type="search" onchange={handleOwnerChange}></lightning-input>
-      <!-- Add other filter inputs (Account Type, Annual Revenue, etc.) here -->
-      <div class="my-input">
-        <lightning-slider class="my-input" label="Annual Revenue" min="10000" max="1000000" step="10000"
-          value={annualRevenue} onchange={handleRevenueChange}></lightning-slider>
-      </div>
-      <lightning-button class="my-input" label="Search" onclick={handleSearch}></lightning-button>
-    </div>
+    <!-- Add your filter inputs here -->
+    <form class="filter-section">
+      <lightning-layout class="custom-box">
+        <lightning-layout-item padding="around-small">
+          <lightning-input label="Account Name" type="text" placeholder="Free text search (3 characters or more)"
+            minlength="3" onchange={handleNameChange}></lightning-input>
+        </lightning-layout-item>
+        <lightning-layout-item padding="around-small">
+          <!-- <lightning-input label="Owner" type="search" placeholder="Search by Owner Name (3 characters or more)"
+            minlength="3" onchange={handleOwnerChange}></lightning-input> -->
+          <c-searchable-combobox label="Owner" options={ownerOptions} value={searchAccountOwner}
+            onchange={handleOwnerChange}></c-searchable-combobox>
+        </lightning-layout-item>
+      </lightning-layout>
+      <lightning-layout class="custom-box">
+        <lightning-layout-item padding="around-small">
+          <lightning-select name="accounttypes" label="Type" value={accountType} options={accountTypeOptions}
+            onchange={handleAccountTypeChange}></lightning-select>
+        </lightning-layout-item>
+        <lightning-layout-item padding="around-small">
+          <lightning-slider class="slds-p-top_large" label="Annual Revenue" min="10000" max="1000000" step="10000"
+            value={annualRevenue} onchange={handleAnnualRevenueChange}></lightning-slider>
+        </lightning-layout-item>
+        <lightning-layout-item padding="around-large">
+          <lightning-button variant="brand" class="search-btn" label="Search" onclick={handleSearch}></lightning-button>
+        </lightning-layout-item>
+      </lightning-layout>
+    </form>
 
     <!-- Second Section: Display Records Per Page -->
     <div class="display-per-page">
-      <lightning-combobox class="my-input" label="Record displayed per page" options={recordPerPageOptions}
+      <lightning-combobox name="recordperpage" label="Record displayed per page" options={recordsPerPageOptions}
         value={recordsPerPage} onchange={handleRecordsPerPageChange}></lightning-combobox>
     </div>
 
     <!-- Third Section: Search Result Table -->
     <div class="search-result-section">
-      <lightning-datatable key-field="Id" data={accountData} columns={columns} onrowaction={handleRowAction}
+      <lightning-datatable key-field="Id" data={showAccounts} columns={columns} onrowaction={handleRowAction}
         hide-checkbox-column="true">
       </lightning-datatable>
     </div>
 
     <!-- Fourth Section: Pagination -->
     <div class="pagination">
-      <lightning-button label="Previous" disabled={disablePrevious} onclick={handlePrevious}></lightning-button>
-      <span>{currentPage} / {totalPages}</span>
-      <lightning-button label="Next" disabled={disableNext} onclick={handleNext}></lightning-button>
+      <lightning-button class="pg-btn" label="Previous" disabled={disablePrevious}
+        onclick={handlePrevious}></lightning-button>
+      <span>Total Records: {allAccounts.length} - Page {currentPage} of {totalPages}</span>
+      <span></span>
+      <lightning-button class="pg-btn" label="Next" disabled={disableNext} onclick={handleNext}></lightning-button>
     </div>
   </div>
 </template>

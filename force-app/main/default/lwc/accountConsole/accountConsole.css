@@ -4,14 +4,27 @@
 
 .display-per-page {
   margin-bottom: 20px;
+  width: 200px;
 }
 
 .pagination {
   margin-top: 20px;
+  text-align: center;
 }
 
-/* Width of lightning-input is 30% */
-.my-input {
-  width: 200px;
-  margin-bottom: 20px;
+.custom-box {
+  background-color: #f4f6f9;
+}
+
+.search-btn {
+  margin-left: 30px;
+}
+
+.pg-btn {
+  margin: 0 10px;
+}
+
+:host {
+  --slds-c-slider-track-color-background: orange;
+  --slds-c-slider-thumb-color-foreground: black;
 }
