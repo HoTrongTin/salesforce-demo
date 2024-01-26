@@ -1,55 +1,12 @@
-global class AccountHourlyBatch implements Database.Batchable<sObject>, Database.AllowsCallouts, Schedulable {
-
-    global Database.QueryLocator start(Database.BatchableContext BC) {
-        return Database.getQueryLocator('SELECT Name, Type, BillingStreet, BillingCity, BillingState, BillingPostalCode, Phone, Website, ExternalId__c FROM Account');
-    }
-    global void execute(Database.BatchableContext BC, List<Account> scope) {
-        // Call the external endpoint to get new account data
-        List<Account> updatedAccounts = callExternalEndpoint();
-        
-        // Map to store accounts by ExternalId__c
-        Map<String, Account> externalIdToAccountMap = new Map<String, Account>();
-        for (Account acc : updatedAccounts) {
-            externalIdToAccountMap.put(acc.ExternalId__c, acc);
-        }
-
-        // Update existing accounts
-        List<Account> accountsToUpdate = new List<Account>();
-        for (Account existingAccount : scope) {
-            if (externalIdToAccountMap.containsKey(existingAccount.ExternalId__c)) {
-                Account updatedAccount = externalIdToAccountMap.get(existingAccount.ExternalId__c);
-                updateAccountFields(existingAccount, updatedAccount);
-                accountsToUpdate.add(existingAccount);
-            }
-        }
-
-        // Insert new accounts
-        List<Account> newAccounts = new List<Account>();
-        List<String> updateIds = new List<String>();
-        for (Account acc : accountsToUpdate) {
-            updateIds.add(acc.ExternalId__c);
-        }
-        for (String externalId : externalIdToAccountMap.keySet()) {
-            if (!updateIds.contains(externalId)) {
-                newAccounts.add(externalIdToAccountMap.get(externalId));
-            }
-        }
-
-        // Add new accounts to the list of accounts to update or insert
-        accountsToUpdate.addAll(newAccounts);
-
-        // Update or insert accounts
-        if (!accountsToUpdate.isEmpty()) {
-            upsert accountsToUpdate ExternalId__c;
-        }
-    }
-
-    global void finish(Database.BatchableContext BC) {
-        // Execute any post-processing logic
+global class AccountHourlyBatch implements Schedulable {
+    global void execute(SchedulableContext sc) {
+        System.debug('Scheduled job started...');
+        callExternalEndpoint();
     }
 
     // Callout to the external endpoint to get account data
-    private List<Account> callExternalEndpoint() {
+    @future(callout=true)
+    public static void callExternalEndpoint() {
         HttpRequest req = new HttpRequest();
         HttpResponse res = new HttpResponse();
         Http http = new Http();
@@ -61,15 +18,48 @@ global class AccountHourlyBatch implements Database.Batchable<sObject>, Database
             res = http.send(req);
             // Parse the response and create a list of Account records
             List<Account> updatedAccounts = parseResponse(res.getBody());
-            return updatedAccounts;
+
+            // Map to store accounts by ExternalId__c
+            Map<String, Account> externalIdToAccountMap = new Map<String, Account>();
+            for (Account acc : updatedAccounts) {
+                externalIdToAccountMap.put(acc.ExternalId__c, acc);
+            }
+
+            // Loop through external
+            List<Account> accountsToUpsert = new List<Account>();
+            for (String externalId : externalIdToAccountMap.keySet()) {
+
+                // Query for existing account from the database
+                List<Account> existingAccounts = Database.query('SELECT Name, Type, BillingStreet, BillingCity, BillingState, BillingPostalCode, Phone, Website, ExternalId__c FROM Account WHERE ExternalId__c = :externalId');
+                if (!existingAccounts.isEmpty()) {
+                    // Account exists, update it
+                    Account existingAccount = existingAccounts[0];
+                    Account updatedAccount = externalIdToAccountMap.get(externalId);
+
+                    // Skip if the account fields are equal
+                    Boolean fieldsAreEqual = AccountHelper.fieldsAreEqual(updatedAccount, existingAccount);
+                    if (fieldsAreEqual) {
+                        continue;
+                    }
+
+                    updateAccountFields(existingAccount, updatedAccount);
+                    accountsToUpsert.add(existingAccount);
+                } else {
+                    // Account does not exist, insert it
+                    accountsToUpsert.add(externalIdToAccountMap.get(externalId));
+                }
+            }
+            // Update or insert accounts
+            if (!accountsToUpsert.isEmpty()) {
+                upsert accountsToUpsert ExternalId__c;
+            }
         } catch (Exception e) {
             System.debug('Error: ' + e.getMessage());
-            return new List<Account>();
         }
     }
 
     // Parse the JSON response and create a list of Account records
-    private List<Account> parseResponse(String responseBody) {
+    static List<Account> parseResponse(String responseBody) {
         List<Account> accounts = new List<Account>();
         
         List<Object> jsonList = (List<Object>) JSON.deserializeUntyped(responseBody);
@@ -95,7 +85,7 @@ global class AccountHourlyBatch implements Database.Batchable<sObject>, Database
     }
 
     // Update existing Account fields
-    private void updateAccountFields(Account existingAccount, Account updatedAccount) {
+    static void updateAccountFields(Account existingAccount, Account updatedAccount) {
         existingAccount.Name = updatedAccount.Name;
         existingAccount.Type = updatedAccount.Type;
         existingAccount.BillingStreet = updatedAccount.BillingStreet;
@@ -106,14 +96,7 @@ global class AccountHourlyBatch implements Database.Batchable<sObject>, Database
         existingAccount.Website = updatedAccount.Website;
     }
 
-    // Method required by the Schedulable interface
-    global void execute(SchedulableContext sc) {
-        System.debug('Scheduled job started...');
-
-        // Instantiate the batch class
-        AccountHourlyBatch myBatch = new AccountHourlyBatch();
-
-        // Start the batch execution
-        Database.executeBatch(myBatch);
+    global void finish(Database.BatchableContext BC) {
+        // Execute any post-processing logic
     }
 }

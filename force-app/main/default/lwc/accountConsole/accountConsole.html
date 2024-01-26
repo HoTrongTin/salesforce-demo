@@ -12,7 +12,7 @@
         <lightning-layout-item padding="around-small">
           <!-- <lightning-input label="Owner" type="search" placeholder="Search by Owner Name (3 characters or more)"
             minlength="3" onchange={handleOwnerChange}></lightning-input> -->
-          <c-searchable-combobox label="Owner" options={ownerOptions} value={searchAccountOwner}
+          <c-searchable-combobox label="Owner" options={ownerOptions} value={searchAccountOwnerName}
             onchange={handleOwnerChange}></c-searchable-combobox>
         </lightning-layout-item>
       </lightning-layout>
@@ -39,7 +39,7 @@
 
     <!-- Third Section: Search Result Table -->
     <div class="search-result-section">
-      <lightning-datatable key-field="Id" data={showAccounts} columns={columns} onrowaction={handleRowAction}
+      <lightning-datatable key-field="Id" data={allAccounts} columns={columns} onrowaction={handleRowAction}
         hide-checkbox-column="true">
       </lightning-datatable>
     </div>
@@ -48,7 +48,7 @@
     <div class="pagination">
       <lightning-button class="pg-btn" label="Previous" disabled={disablePrevious}
         onclick={handlePrevious}></lightning-button>
-      <span>Total Records: {allAccounts.length} - Page {currentPage} of {totalPages}</span>
+      <span>Total Records: {totalRecords} - Page {currentPage} of {totalPages}</span>
       <span></span>
       <lightning-button class="pg-btn" label="Next" disabled={disableNext} onclick={handleNext}></lightning-button>
     </div>

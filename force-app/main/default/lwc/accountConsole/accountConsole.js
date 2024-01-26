@@ -1,6 +1,8 @@
 import { LightningElement, track, wire } from 'lwc';
 import getAccounts from '@salesforce/apex/AccountController.getAccounts';
+import getAccountsCount from '@salesforce/apex/AccountController.getAccountsCount';
 import getAccountTypes from '@salesforce/apex/AccountController.getAccountTypes';
+import getAccountOwners from '@salesforce/apex/AccountController.getAccountOwners';
 
 const columns = [
   { label: 'No.', fieldName: 'No', type: 'number' },
@@ -13,29 +15,41 @@ const columns = [
 
 export default class AccountConsole extends LightningElement {
   allUnfilteredAccounts = [];
-  allAccounts = [];
+  @track allAccounts = [];
 
   searchAccountName = '';
   searchAccountOwner = '';
+  searchAccountOwnerName = '';
   @track annualRevenue = 0;
   @track accountType = '';
 
-  @track showAccounts = [];
+  @track query = {
+    recordsPerPage: 5,
+    currentPage: 1,
+    accountName: '',
+    ownerId: '',
+    annualRevenue: '0',
+    accountType: ''
+  }
+
   @track columns = columns;
   @track currentPage = 1;
+  @track totalRecords = 0;
   @track totalPages = 1;
   @track ownerOptions = [];
   @track accountTypeOptions = [];
   @track recordsPerPageOptions = [
+    { label: '5', value: 5 },
     { label: '10', value: 10 },
-    { label: '20', value: 20 },
-    { label: '30', value: 30 }
+    { label: '15', value: 15 }
   ];
-  @track recordsPerPage = 10;
+  @track recordsPerPage = 5;
   @track disablePrevious = true;
   @track disableNext = false;
 
-  @wire(getAccounts)
+  @wire(getAccounts, {
+    query: '$query'
+  })
   wiredAccounts({ error, data }) {
     if (data) {
       console.log('data 1: ', data);
@@ -46,20 +60,28 @@ export default class AccountConsole extends LightningElement {
           OwnerName: record.Owner.Name,
           OwnerUrl: '/' + record.OwnerId,
           Phone: record.Phone,
-          AnnualRevenue: record.AnnualRevenue,
+          AnnualRevenue: +record.AnnualRevenue,
           Type: record.Type,
           LastModifiedDate: this.reformatDateTime(record.LastModifiedDate),
         };
       });
 
-      this.ownerOptions = [...new Set(this.allUnfilteredAccounts.map((record) => record.OwnerName))].map((record) => {
-        return {
-          label: record,
-          value: record
-        };
-      });
-
       this.showAccountsChangeHandler();
+    } else if (error) {
+      console.error(error);
+    }
+  }
+
+  @wire(getAccountsCount, {
+    query: '$query'
+  })
+  wiredAccountsCount({ error, data }) {
+    if (data) {
+      console.log('data 3: ', data);
+      this.totalRecords = data;
+      this.totalPages = Math.ceil(this.totalRecords / this.recordsPerPage);
+      this.disablePrevious = this.currentPage === 1;
+      this.disableNext = this.currentPage === this.totalPages;
     } else if (error) {
       console.error(error);
     }
@@ -83,11 +105,40 @@ export default class AccountConsole extends LightningElement {
     }
   }
 
+  @wire(getAccountOwners)
+  wiredAccountOwners({ error, data }) {
+    if (data) {
+      console.log('data 4: ', data);
+      this.ownerOptions = data.map((record) => {
+        return {
+          label: record.Name,
+          value: record.Id
+        };
+      })
+
+    } else if (error) {
+      console.error(error);
+    }
+  }
+
+  modifyQuery() {
+    this.query = {
+      ...this.query,
+      recordsPerPage: this.recordsPerPage,
+      currentPage: this.currentPage,
+      accountName: this.searchAccountName.length >= 3 ? this.searchAccountName : '',
+      ownerId: this.searchAccountOwner,
+      annualRevenue: `${this.annualRevenue}`,
+      accountType: this.accountType
+    }
+  }
+
   showAccountsChangeHandler() {
-    const isSearchByName = this.searchAccountName.length >= 3 || this.searchAccountOwner.length >= 3;
+    const isSearchByName = this.searchAccountName.length >= 3
+    const isSearchByAccountOwner = this.searchAccountOwner != '' ? true : false;
     const isSearchByAnnualRevenue = this.annualRevenue > 0;
     const isSearchByAccountType = this.accountType != '' ? true : false;
-    const isSearching = isSearchByName || isSearchByAnnualRevenue || isSearchByAccountType;
+    const isSearching = isSearchByName || isSearchByAnnualRevenue || isSearchByAccountType || isSearchByAccountOwner;
 
     // Reset all accounts to show
     this.allAccounts = this.allUnfilteredAccounts;
@@ -117,11 +168,9 @@ export default class AccountConsole extends LightningElement {
 
     // Modify No. column to show the correct number
     this.allAccounts = this.allAccounts.map((record, index) => {
-      return { ...record, No: index + 1 }
+      return { ...record, No: (this.currentPage - 1) * this.recordsPerPage + index + 1 };
     })
 
-    this.showAccounts = this.allAccounts.slice((this.currentPage - 1) * this.recordsPerPage, this.currentPage * this.recordsPerPage)
-    this.totalPages = Math.ceil(this.allAccounts.length / this.recordsPerPage);
     this.disablePrevious = this.currentPage === 1;
     this.disableNext = this.currentPage === this.totalPages;
   }
@@ -132,6 +181,8 @@ export default class AccountConsole extends LightningElement {
 
   handleOwnerChange(event) {
     this.searchAccountOwner = event.target.value;
+    const foundOption = this.ownerOptions.find((option) => option.value === this.searchAccountOwner);
+    this.searchAccountOwnerName = foundOption ? foundOption.label : '';
   }
 
   handleAccountTypeChange(event) {
@@ -149,6 +200,7 @@ export default class AccountConsole extends LightningElement {
     }
 
     this.currentPage = 1;
+    this.modifyQuery();
     this.showAccountsChangeHandler();
     console.log('*** Handle search with accountName: ', this.searchAccountName, ' and accountOwner: ', this.searchAccountOwner, ' and annualRevenue: ', this.annualRevenue, ' and accountType: ', this.accountType);
   }
@@ -156,6 +208,7 @@ export default class AccountConsole extends LightningElement {
   handlePrevious() {
     if (this.currentPage > 1) {
       this.currentPage -= 1;
+      this.modifyQuery();
       this.showAccountsChangeHandler();
     }
   }
@@ -163,6 +216,7 @@ export default class AccountConsole extends LightningElement {
   handleNext() {
     if (this.currentPage < this.totalPages) {
       this.currentPage += 1;
+      this.modifyQuery();
       this.showAccountsChangeHandler();
     }
   }
@@ -170,6 +224,8 @@ export default class AccountConsole extends LightningElement {
   handleRecordsPerPageChange(event) {
     this.recordsPerPage = +event.detail.value;
     this.currentPage = 1;
+
+    this.modifyQuery();
     this.showAccountsChangeHandler();
   }
 
