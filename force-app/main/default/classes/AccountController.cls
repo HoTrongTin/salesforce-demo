@@ -82,15 +82,12 @@ public class AccountController {
       // Greater than or equal to
       whereClause += ' AnnualRevenue >= ' + query.get('annualRevenue');
     }
-
-    System.debug('whereClause 2 : ' + whereClause);
     if (query.get('ownerId') != null && query.get('ownerId') != '') {
       if (whereClause != '') {
         whereClause += ' AND';
       }
       whereClause += ' OwnerId = \'' + query.get('ownerId') + '\'';
     }
-    System.debug('************ whereClause 3 : ' + whereClause);
     return whereClause;
   }
 }
