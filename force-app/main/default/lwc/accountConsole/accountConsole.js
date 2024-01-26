@@ -18,13 +18,12 @@ export default class AccountConsole extends LightningElement {
   @track allAccounts = [];
 
   searchAccountName = '';
-  searchAccountOwner = '';
-  searchAccountOwnerName = '';
+  searchAccountOwnerId = '';
   @track annualRevenue = 0;
   @track accountType = '';
 
   @track query = {
-    recordsPerPage: 5,
+    recordsPerPage: 10,
     currentPage: 1,
     accountName: '',
     ownerId: '',
@@ -39,11 +38,11 @@ export default class AccountConsole extends LightningElement {
   @track ownerOptions = [];
   @track accountTypeOptions = [];
   @track recordsPerPageOptions = [
-    { label: '5', value: 5 },
     { label: '10', value: 10 },
-    { label: '15', value: 15 }
+    { label: '20', value: 20 },
+    { label: '30', value: 30 }
   ];
-  @track recordsPerPage = 5;
+  @track recordsPerPage = 10;
   @track disablePrevious = true;
   @track disableNext = false;
 
@@ -76,13 +75,16 @@ export default class AccountConsole extends LightningElement {
     query: '$query'
   })
   wiredAccountsCount({ error, data }) {
-    if (data) {
+    if (!error) {
       console.log('data 3: ', data);
       this.totalRecords = data;
       this.totalPages = Math.ceil(this.totalRecords / this.recordsPerPage);
-      this.disablePrevious = this.currentPage === 1;
-      this.disableNext = this.currentPage === this.totalPages;
-    } else if (error) {
+      if (this.currentPage > this.totalPages) {
+        this.currentPage = this.totalPages;
+      }
+      this.disablePrevious = this.currentPage <= 1;
+      this.disableNext = this.currentPage >= this.totalPages;
+    } else {
       console.error(error);
     }
   }
@@ -127,7 +129,7 @@ export default class AccountConsole extends LightningElement {
       recordsPerPage: this.recordsPerPage,
       currentPage: this.currentPage,
       accountName: this.searchAccountName.length >= 3 ? this.searchAccountName : '',
-      ownerId: this.searchAccountOwner,
+      ownerId: this.searchAccountOwnerId,
       annualRevenue: `${this.annualRevenue}`,
       accountType: this.accountType
     }
@@ -135,7 +137,7 @@ export default class AccountConsole extends LightningElement {
 
   showAccountsChangeHandler() {
     const isSearchByName = this.searchAccountName.length >= 3
-    const isSearchByAccountOwner = this.searchAccountOwner != '' ? true : false;
+    const isSearchByAccountOwner = this.searchAccountOwnerId != '' ? true : false;
     const isSearchByAnnualRevenue = this.annualRevenue > 0;
     const isSearchByAccountType = this.accountType != '' ? true : false;
     const isSearching = isSearchByName || isSearchByAnnualRevenue || isSearchByAccountType || isSearchByAccountOwner;
@@ -145,7 +147,7 @@ export default class AccountConsole extends LightningElement {
 
     if (isSearchByName) {
       this.allAccounts = this.allAccounts.filter((record) => {
-        return record.Name.toLowerCase().includes(this.searchAccountName.toLowerCase()) && record.OwnerName.toLowerCase().includes(this.searchAccountOwner.toLowerCase());
+        return record.Name.toLowerCase().includes(this.searchAccountName.toLowerCase()) && record.OwnerName.toLowerCase().includes(this.searchAccountOwnerId.toLowerCase());
       });
     }
 
@@ -180,9 +182,8 @@ export default class AccountConsole extends LightningElement {
   }
 
   handleOwnerChange(event) {
-    this.searchAccountOwner = event.target.value;
-    const foundOption = this.ownerOptions.find((option) => option.value === this.searchAccountOwner);
-    this.searchAccountOwnerName = foundOption ? foundOption.label : '';
+    console.log('event.target.recordId: ', event.detail.recordId);
+    this.searchAccountOwnerId = event.detail.recordId;
   }
 
   handleAccountTypeChange(event) {
@@ -202,7 +203,7 @@ export default class AccountConsole extends LightningElement {
     this.currentPage = 1;
     this.modifyQuery();
     this.showAccountsChangeHandler();
-    console.log('*** Handle search with accountName: ', this.searchAccountName, ' and accountOwner: ', this.searchAccountOwner, ' and annualRevenue: ', this.annualRevenue, ' and accountType: ', this.accountType);
+    console.log('*** Handle search with accountName: ', this.searchAccountName, ' and accountOwner: ', this.searchAccountOwnerId, ' and annualRevenue: ', this.annualRevenue, ' and accountType: ', this.accountType);
   }
 
   handlePrevious() {
@@ -232,10 +233,6 @@ export default class AccountConsole extends LightningElement {
   // use lifecycle hook
   connectedCallback() {
     // console.log('******************** ConnectedCallback...');
-  }
-
-  get searchResultMessage() {
-    return 'Search result for ' + (this.searchAccountName ? 'Account Name: ' + this.searchAccountName : '') + (this.searchAccountOwner ? 'Account Owner: ' + this.searchAccountOwner : '');
   }
 
   // Datetime to delta string, eg: 2020-01-01T00:00:00.000Z to 1 day ago

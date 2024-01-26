@@ -10,10 +10,9 @@
             minlength="3" onchange={handleNameChange}></lightning-input>
         </lightning-layout-item>
         <lightning-layout-item padding="around-small">
-          <!-- <lightning-input label="Owner" type="search" placeholder="Search by Owner Name (3 characters or more)"
-            minlength="3" onchange={handleOwnerChange}></lightning-input> -->
-          <c-searchable-combobox label="Owner" options={ownerOptions} value={searchAccountOwnerName}
-            onchange={handleOwnerChange}></c-searchable-combobox>
+          <lightning-record-picker object-api-name="User" placeholder="Lookup" label="Owner"
+            onchange={handleOwnerChange}>
+          </lightning-record-picker>
         </lightning-layout-item>
       </lightning-layout>
       <lightning-layout class="custom-box">

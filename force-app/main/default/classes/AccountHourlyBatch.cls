@@ -1,12 +1,12 @@
 global class AccountHourlyBatch implements Schedulable {
     global void execute(SchedulableContext sc) {
         System.debug('Scheduled job started...');
-        callExternalEndpoint();
+        callExternalEndpointAndUpsertAccount();
     }
 
     // Callout to the external endpoint to get account data
     @future(callout=true)
-    public static void callExternalEndpoint() {
+    public static void callExternalEndpointAndUpsertAccount() {
         HttpRequest req = new HttpRequest();
         HttpResponse res = new HttpResponse();
         Http http = new Http();
