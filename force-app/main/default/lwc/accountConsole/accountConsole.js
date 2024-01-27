@@ -2,7 +2,6 @@ import { LightningElement, track, wire } from 'lwc';
 import getAccounts from '@salesforce/apex/AccountController.getAccounts';
 import getAccountsCount from '@salesforce/apex/AccountController.getAccountsCount';
 import getAccountTypes from '@salesforce/apex/AccountController.getAccountTypes';
-import getAccountOwners from '@salesforce/apex/AccountController.getAccountOwners';
 
 const columns = [
   { label: 'No.', fieldName: 'No', type: 'number' },
@@ -35,7 +34,6 @@ export default class AccountConsole extends LightningElement {
   @track currentPage = 1;
   @track totalRecords = 0;
   @track totalPages = 1;
-  @track ownerOptions = [];
   @track accountTypeOptions = [];
   @track recordsPerPageOptions = [
     { label: '10', value: 10 },
@@ -102,22 +100,6 @@ export default class AccountConsole extends LightningElement {
 
       // Add "All" option
       this.accountTypeOptions.unshift({ label: 'All', value: '' });
-    } else if (error) {
-      console.error(error);
-    }
-  }
-
-  @wire(getAccountOwners)
-  wiredAccountOwners({ error, data }) {
-    if (data) {
-      console.log('data 4: ', data);
-      this.ownerOptions = data.map((record) => {
-        return {
-          label: record.Name,
-          value: record.Id
-        };
-      })
-
     } else if (error) {
       console.error(error);
     }

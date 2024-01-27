@@ -37,16 +37,6 @@ public class AccountController {
   }
 
   @AuraEnabled(cacheable=true)
-  public static List<User> getAccountOwners() {
-    try {
-      List<User> accountOwners = [SELECT Id, Name FROM User];
-      return accountOwners;
-    } catch (Exception e) {
-      throw new AuraHandledException(e.getMessage());
-    }
-  }
-
-  @AuraEnabled(cacheable=true)
   public static List<String> getAccountTypes() {
     try {
       List<String> accountTypes = new List<String>();
