@@ -127,24 +127,6 @@ export default class AccountConsole extends LightningElement {
     // Reset all accounts to show
     this.allAccounts = this.allUnfilteredAccounts;
 
-    if (isSearchByName) {
-      this.allAccounts = this.allAccounts.filter((record) => {
-        return record.Name.toLowerCase().includes(this.searchAccountName.toLowerCase()) && record.OwnerName.toLowerCase().includes(this.searchAccountOwnerId.toLowerCase());
-      });
-    }
-
-    if (isSearchByAccountType) {
-      this.allAccounts = this.allAccounts.filter((record) => {
-        return record.Type === this.accountType;
-      });
-    }
-
-    if (isSearchByAnnualRevenue) {
-      this.allAccounts = this.allAccounts.filter((record) => {
-        return record.AnnualRevenue >= this.annualRevenue;
-      });
-    }
-
     // Sort by Account Name
     if (isSearching) {
       this.allAccounts.sort((a, b) => { return a.Name.localeCompare(b.Name) });
